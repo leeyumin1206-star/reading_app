@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#FFFEFB" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1E1812" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#221A19" media="(prefers-color-scheme: dark)">
 <title>나의 서재</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon-192.png">
@@ -13,9 +13,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
 <style>
 :root{
-  --bg:#FFFEFB; --surface:#FFFFFF; --line:#ECE3D4; --field:#F3ECE0; --chip:#C9B79C;
-  --ink:#33261B; --sub:#6B5644; --sub2:#5A4636; --accent:#8C4A21; --accent-ink:#FFFFFF;
-  --star:#A8581A; --star-off:#DCCFBA; --danger:#9B2C1F; --shadow:rgba(76,44,20,.18);
+  --bg:#FFFFFF; --blush:#FCEEEA; --blush2:#F8D9D0; --line:#F2E7E3;
+  --ink:#3A3433; --sub:#776C69; --icon:#B79F98; --muted:#9A8F8B;
+  --accent:#B5604D; --accent-ink:#FFFFFF; --soft-ink:#8E4636; --add:#E59A86;
+  --star:#E08C76; --star-off:#F1DAD3; --danger:#A8382A; --shadow:rgba(214,150,130,.25);
   --font:'Malgun Gothic','맑은 고딕','Noto Sans KR','Apple SD Gothic Neo',sans-serif;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
@@ -23,15 +24,17 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#1E1812; --surface:#2A221A; --line:#3D3226; --field:#332A20; --chip:#6B5644;
-    --ink:#F1E8DA; --sub:#C2B29C; --sub2:#D6C7B2; --accent:#D08A55; --accent-ink:#1E1812;
-    --star:#E0A15C; --star-off:#4A3D2F; --danger:#E58A7C; --shadow:rgba(0,0,0,.4);
+    --bg:#221A19; --blush:#332624; --blush2:#4A3330; --line:#3B2E2C;
+    --ink:#F5E9E6; --sub:#C9B3AE; --icon:#B08B83; --muted:#9E8580;
+    --accent:#E8957F; --accent-ink:#221A19; --soft-ink:#F3C2B4; --add:#E59A86;
+    --star:#F0A08B; --star-off:#4A3633; --danger:#F09080; --shadow:rgba(0,0,0,.4);
   }
 }
 :root[data-theme="dark"]{
-  --bg:#1E1812; --surface:#2A221A; --line:#3D3226; --field:#332A20; --chip:#6B5644;
-  --ink:#F1E8DA; --sub:#C2B29C; --sub2:#D6C7B2; --accent:#D08A55; --accent-ink:#1E1812;
-  --star:#E0A15C; --star-off:#4A3D2F; --danger:#E58A7C; --shadow:rgba(0,0,0,.4);
+  --bg:#221A19; --blush:#332624; --blush2:#4A3330; --line:#3B2E2C;
+  --ink:#F5E9E6; --sub:#C9B3AE; --icon:#B08B83; --muted:#9E8580;
+  --accent:#E8957F; --accent-ink:#221A19; --soft-ink:#F3C2B4; --add:#E59A86;
+  --star:#F0A08B; --star-off:#4A3633; --danger:#F09080; --shadow:rgba(0,0,0,.4);
 }
 *,*::before,*::after{box-sizing:border-box}
 html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
@@ -44,133 +47,129 @@ img{max-width:100%}
 
 .app{height:100%;display:flex}
 .pane{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.list-pane{position:relative;flex:1;display:flex;flex-direction:column}
-.detail-pane{flex:1}
-/* narrow: one pane at a time */
+.list-pane{position:relative;flex:1}
+.detail-pane{flex:1;position:relative}
 body[data-view="home"] .detail-pane{display:none}
 body:not([data-view="home"]) .list-pane{display:none}
 @media (min-width:700px){
-  .list-pane{flex:0 0 360px;display:flex!important;border-right:1px solid var(--line)}
+  .list-pane{flex:0 0 400px;display:block!important;border-right:1px solid var(--line)}
   .detail-pane{display:block!important}
   .back-btn{display:none!important}
 }
 
-/* header */
-.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding:24px 24px 16px;border-bottom:1px solid var(--line);background:var(--bg);position:sticky;top:0;z-index:2}
-.top h1{margin:0;font-size:28px;font-weight:700;letter-spacing:-.02em}
-.sub{margin:4px 0 0;font-size:14px;color:var(--sub)}
-.icon-btn{width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border-radius:22px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+/* home */
+.brand{padding:24px 24px 0;font-size:13px;font-weight:700;letter-spacing:.04em;color:var(--accent)}
+.greet{padding:12px 24px 0}
+.greet h1{margin:0;font-size:26px;font-weight:700;letter-spacing:-.02em}
+.greet p{margin:6px 0 0;font-size:14px;color:var(--sub)}
+.sec{display:flex;justify-content:space-between;align-items:baseline;padding:24px 24px 12px;font-size:16px;font-weight:700}
+.sec span{font-size:13px;font-weight:400;color:var(--sub)}
+.hero-card{display:flex;flex-direction:column;justify-content:flex-end;margin:0 24px;height:148px;border-radius:20px;padding:18px 20px;color:#FFFFFF;text-align:left;border:none;width:calc(100% - 48px);background-size:cover;background-position:center;box-shadow:0 10px 24px var(--shadow)}
+.hero-card b{font-size:22px;font-weight:700;text-shadow:0 1px 8px rgba(58,40,36,.3)}
+.hero-card small{font-size:13px;margin-top:4px;opacity:.95}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:12px;padding:0 24px 120px}
+.tile{aspect-ratio:3/4;border-radius:16px;border:none;padding:12px;display:flex;flex-direction:column;justify-content:flex-end;color:#FFFFFF;text-align:left;background-size:cover;background-position:center}
+.tile b{font-size:15px;font-weight:700;line-height:1.3;text-shadow:0 1px 6px rgba(58,40,36,.35);word-break:keep-all}
+.tile small{font-size:11px;margin-top:3px;opacity:.92}
+.rows{display:flex;flex-direction:column;gap:2px;padding:0 12px 110px}
+.lrow{display:flex;align-items:center;gap:14px;padding:8px 12px;border-radius:16px;border:none;background:transparent;text-align:left;width:100%}
+.lrow[aria-current="true"]{background:var(--blush)}
+.lthumb{width:40px;height:54px;flex-shrink:0;border-radius:10px;background-size:cover;background-position:center}
+.lbody{display:flex;flex-direction:column;gap:4px;flex:1;min-width:0}
+.lbody b{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lbody span{font-size:12px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.empty{margin:8px 24px;padding:28px 20px;border-radius:20px;background:var(--blush);text-align:center;color:var(--sub);font-size:15px;line-height:1.7}
 
-/* list */
-.list{display:flex;flex-direction:column;gap:12px;padding:16px 20px 110px}
-.card{display:flex;gap:16px;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;text-align:left;width:100%}
-.card[aria-current="true"]{border-color:var(--chip);box-shadow:0 0 0 1px var(--chip)}
-.card-body{display:flex;flex-direction:column;gap:5px;min-width:0;flex:1}
-.card-title{font-size:18px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.card-meta{font-size:13px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.card-row{display:flex;align-items:center;gap:8px;margin-top:2px;flex-wrap:wrap}
-.card-date{font-size:12px;color:var(--sub);margin-top:auto}
-.badge{font-size:12px;padding:2px 8px;border-radius:10px;border:1px solid var(--chip);color:var(--sub2);white-space:nowrap}
-.num{font-size:13px;color:var(--sub2)}
-.empty{padding:48px 28px;text-align:center;color:var(--sub);font-size:15px;line-height:1.7}
-
-/* cover */
-.cover{position:relative;flex-shrink:0;border-radius:4px 8px 8px 4px;overflow:hidden;display:flex;align-items:flex-end;padding:8px;font-size:11px;line-height:1.3;word-break:keep-all;box-shadow:inset 4px 0 0 rgba(0,0,0,.12);background-size:cover;background-position:center}
-.cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
-.cover-s{width:64px;height:92px}
-.cover-l{width:104px;height:150px;font-size:14px;padding:10px;box-shadow:inset 5px 0 0 rgba(0,0,0,.12),0 8px 20px var(--shadow)}
-@media (min-width:700px){.cover-l{width:128px;height:184px;font-size:16px}}
+/* bottom nav */
+.nav{position:fixed;left:0;right:0;bottom:0;height:calc(80px + env(safe-area-inset-bottom,0px));padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center;z-index:5}
+body[data-view="detail"] .nav,body[data-view="form"] .nav{display:none}
+@media (min-width:700px){.nav{right:auto;width:400px;display:flex!important;border-right:1px solid var(--line)}}
+.nav-item{width:72px;display:flex;flex-direction:column;align-items:center;gap:4px;border:none;background:none;color:var(--muted);font-size:11px}
+.nav-item[aria-current="page"]{color:var(--accent)}
+.nav-add{width:54px;height:54px;border-radius:27px;border:none;background:var(--add);color:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px var(--shadow);margin-top:-18px}
 
 /* stars */
 .stars{position:relative;display:inline-block;line-height:1;letter-spacing:1px;white-space:nowrap;font-size:14px}
 .stars-bg{color:var(--star-off)}
 .stars-fg{position:absolute;left:0;top:0;overflow:hidden;color:var(--star);width:var(--p)}
 
-/* fab */
-.fab{position:absolute;right:24px;bottom:calc(24px + env(safe-area-inset-bottom,0px));width:60px;height:60px;border-radius:30px;border:none;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px var(--shadow)}
-.list-pane .fab{position:fixed}
-@media (min-width:700px){.list-pane .fab{position:absolute;right:20px}}
+/* detail */
+.dhero{height:200px;background-size:cover;background-position:center}
+.back-btn{position:absolute;left:12px;top:16px;width:44px;height:44px;border:none;background:rgba(90,50,44,.22);border-radius:22px;display:flex;align-items:center;justify-content:center;color:#FFFFFF;z-index:3;backdrop-filter:blur(6px)}
+.sheet{position:relative;margin-top:-32px;background:var(--bg);border-radius:28px 28px 0 0;padding:26px 24px 32px;min-height:calc(100% - 168px);display:flex;flex-direction:column;box-shadow:0 -8px 24px rgba(214,150,130,.12)}
+@media (min-width:700px){.sheet{padding:28px 40px 32px}.dhero{height:220px}}
+.sheet h1{margin:0;font-size:23px;font-weight:700;letter-spacing:-.02em;word-break:keep-all}
+.sheet .who{font-size:14px;color:var(--sub);margin:6px 0 16px}
+.drow{display:flex;align-items:center;gap:14px;min-height:50px;border-top:1px solid var(--line)}
+.drow .ic{color:var(--icon);display:flex}
+.drow .k{font-size:12px;letter-spacing:.08em;color:var(--sub);flex:1}
+.drow .v{font-size:14px;display:flex;align-items:center;gap:6px}
+.quote{margin-top:14px;padding:14px 16px;background:var(--blush);border-radius:14px;font-size:15px;line-height:1.6;white-space:pre-wrap;word-break:keep-all}
+.quote.ph{color:var(--sub)}
+.pill{height:52px;border-radius:26px;border:none;background:var(--blush2);color:var(--soft-ink);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;width:100%;margin-top:24px}
 
-/* detail & forms */
-.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px 4px;position:sticky;top:0;background:var(--bg);z-index:2}
-.bar h2{margin:0;font-size:19px;font-weight:700}
-.text-btn{height:44px;padding:0 14px;border:none;background:none;font-size:15px;color:var(--accent);font-weight:500}
-.text-btn.muted{color:var(--sub2);font-weight:400}
-.text-btn.strong{font-weight:700}
-.back-btn{width:44px;height:44px;border:none;background:none;display:flex;align-items:center;justify-content:center;color:var(--ink)}
-.wrap{max-width:640px;padding:0 0 40px}
-.hero{display:flex;gap:20px;align-items:flex-end;padding:4px 24px 20px}
-.hero h1{margin:0;font-size:24px;font-weight:700;letter-spacing:-.02em;word-break:keep-all}
-@media (min-width:700px){.hero h1{font-size:30px}.wrap{padding:16px 24px 40px}}
-.hero-info{display:flex;flex-direction:column;gap:6px;padding-bottom:4px;min-width:0}
-.hero-info .badge{align-self:flex-start}
-.panel{margin:0 20px;padding:18px 20px;background:var(--surface);border:1px solid var(--line);border-radius:16px;display:flex;flex-direction:column;gap:14px}
-.panel + .panel{margin-top:16px}
-.panel h3{margin:0;font-size:17px;font-weight:700}
-.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.label{font-size:12px;color:var(--sub)}
-.value{font-size:15px;margin-top:4px}
-.review{font-size:17px;line-height:1.6;padding:14px 16px;background:var(--bg);border-radius:10px;margin-top:6px;white-space:pre-wrap;word-break:keep-all}
-.review.placeholder{color:var(--sub);font-size:15px}
-
-.form{display:flex;flex-direction:column;gap:20px;padding:12px 24px 48px;max-width:560px}
-.field{display:flex;flex-direction:column;gap:6px}
-.field label,.field .flabel{font-size:13px;color:var(--sub2)}
-.input{height:48px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:16px}
-textarea.input{height:auto;padding:12px 14px;resize:none;line-height:1.6}
+/* form */
+.bar{display:flex;justify-content:space-between;align-items:center;padding:12px 12px 4px;position:sticky;top:0;background:var(--bg);z-index:2}
+.bar h2{margin:0;font-size:18px;font-weight:700}
+.text-btn{height:44px;min-width:60px;padding:0 12px;border:none;background:none;font-size:15px;color:var(--sub)}
+.text-btn.strong{color:var(--accent);font-weight:700}
+.form{display:flex;flex-direction:column;gap:20px;padding:16px 24px 48px;max-width:560px}
+.field{display:flex;flex-direction:column;gap:8px}
+.lab{font-size:12px;letter-spacing:.08em;color:var(--sub)}
+.input{height:50px;padding:0 16px;border-radius:14px;border:1.5px solid transparent;background:var(--blush);font-size:16px}
+.input:focus{border-color:var(--add);outline:none}
+textarea.input{height:auto;padding:14px 16px;resize:none;line-height:1.6}
 .input[aria-invalid="true"]{border-color:var(--danger)}
 .err{font-size:12px;color:var(--danger)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .cover-edit{display:flex;gap:16px;align-items:center}
-.cover-slot{width:96px;height:136px;flex-shrink:0;border-radius:4px 8px 8px 4px;border:1.5px dashed var(--chip);background:var(--surface);display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:12px;overflow:hidden}
+.cover-slot{width:100px;height:140px;flex-shrink:0;border-radius:16px;background:linear-gradient(180deg,#FDF3F0,#F8DED6);display:flex;align-items:center;justify-content:center;color:#C9958A;overflow:hidden}
 .cover-slot img{width:100%;height:100%;object-fit:cover}
 .cover-btns{display:flex;flex-direction:column;gap:10px;flex:1}
-.ghost{height:44px;border-radius:10px;border:1px solid var(--chip);background:var(--surface);font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 12px}
-.seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:4px;background:var(--field);border-radius:12px}
-.seg button{height:44px;border:none;border-radius:9px;background:transparent;font-size:15px;color:var(--sub2)}
-.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);font-weight:700;box-shadow:0 1px 3px var(--shadow)}
+.cover-btns p{margin:0;font-size:13px;color:var(--sub);line-height:1.5}
+.soft{height:42px;border-radius:21px;border:none;background:var(--blush);color:var(--soft-ink);font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;padding:0 12px}
+.seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:5px;background:var(--blush);border-radius:26px}
+.seg button{height:42px;border:none;border-radius:21px;background:transparent;font-size:15px;color:var(--sub)}
+.seg button[aria-pressed="true"]{background:var(--bg);color:var(--ink);font-weight:700;box-shadow:0 2px 8px var(--shadow)}
 .rate{display:flex;gap:2px;align-items:center}
 .rate button{width:48px;height:48px;border:none;background:none;padding:0;position:relative;font-size:34px;line-height:48px;text-align:center}
 .rate .s-bg{color:var(--star-off)}
 .rate .s-fg{position:absolute;left:0;top:0;height:100%;overflow:hidden;color:var(--star);text-align:left;width:var(--f)}
 .rate .s-fg span{display:inline-block;width:48px;text-align:center}
-.primary{height:52px;border:none;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px}
-.danger-btn{height:48px;border-radius:12px;border:1px solid var(--line);background:none;color:var(--danger);font-size:15px}
-.note{font-size:13px;color:var(--sub);line-height:1.6;margin:0}
-.row{display:flex;justify-content:space-between;font-size:14px}
-.row span:first-child{color:var(--sub)}
+.primary{height:54px;border:none;border-radius:27px;background:var(--accent);color:var(--accent-ink);font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 18px rgba(181,96,77,.25)}
+.danger-btn{height:48px;border-radius:24px;border:1px solid var(--line);background:none;color:var(--danger);font-size:15px}
+
+/* settings */
+.page-title{padding:32px 24px 0}
+.page-title h1{margin:0;font-size:26px;font-weight:700;letter-spacing:-.02em}
+.group{padding:22px 24px 0;font-size:12px;letter-spacing:.08em;color:var(--sub)}
+.srows{padding:6px 24px 0}
+.srow{display:flex;align-items:center;gap:14px;min-height:54px;border:none;border-top:1px solid var(--line);background:none;width:100%;text-align:left;padding:0}
+.srow:first-child{border-top:none}
+.srow .ic{color:var(--icon);display:flex}
+.srow .t{font-size:15px;flex:1}
+.srow .r{font-size:14px;color:var(--sub)}
+.tip{margin:10px 24px 0;padding:14px 16px;background:var(--blush);border-radius:14px;font-size:13px;line-height:1.6;color:var(--sub)}
 .placeholder-pane{height:100%;display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:15px;padding:32px;text-align:center}
 
 /* modal & toast */
-.modal{position:fixed;inset:0;background:rgba(30,20,10,.45);display:flex;align-items:center;justify-content:center;padding:24px;z-index:20}
-.modal-box{background:var(--surface);border-radius:16px;padding:22px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:18px}
+.modal{position:fixed;inset:0;background:rgba(40,25,22,.45);display:flex;align-items:center;justify-content:center;padding:24px;z-index:20}
+.modal-box{background:var(--bg);border-radius:20px;padding:22px;max-width:360px;width:100%;display:flex;flex-direction:column;gap:18px}
 .modal-box p{margin:0;font-size:15px;line-height:1.6}
 .modal-actions{display:flex;gap:8px;justify-content:flex-end}
-.modal-actions button{height:44px;padding:0 18px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:15px}
-.modal-actions .ok{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.modal-actions .ok.warn{background:var(--danger);border-color:var(--danger);color:#fff}
-.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-size:14px;z-index:30;max-width:calc(100% - 40px);text-align:center}
+.modal-actions button{height:44px;padding:0 18px;border-radius:22px;border:none;background:var(--blush);font-size:15px}
+.modal-actions .ok{background:var(--accent);color:var(--accent-ink)}
+.modal-actions .ok.warn{background:var(--danger);color:#fff}
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-size:14px;z-index:30;max-width:calc(100% - 40px);text-align:center}
 @media (prefers-reduced-motion:no-preference){.toast{animation:pop .2s ease-out}@keyframes pop{from{opacity:0;transform:translate(-50%,8px)}}}
 </style>
 </head>
 <body data-view="home">
 <div class="app">
-  <aside class="pane list-pane" id="listPane">
-    <header class="top">
-      <div>
-        <h1>나의 서재</h1>
-        <p class="sub" id="count">기록한 책 0권</p>
-      </div>
-      <button class="icon-btn" data-act="settings" aria-label="설정">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
-      </button>
-    </header>
-    <div class="list" id="list"></div>
-    <button class="fab" data-act="add" aria-label="책 추가">
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
-    </button>
-  </aside>
+  <aside class="pane list-pane" id="listPane"></aside>
   <main class="pane detail-pane" id="detailPane"></main>
 </div>
+<nav class="nav" id="nav" aria-label="메뉴"></nav>
 <input type="file" id="camInput" accept="image/*" capture="environment" class="hidden">
 <input type="file" id="galInput" accept="image/*" class="hidden">
 <input type="file" id="importInput" accept=".json,application/json" class="hidden">
@@ -180,7 +179,7 @@ textarea.input{height:auto;padding:12px 14px;resize:none;line-height:1.6}
 (function(){
 'use strict';
 
-/* ---------- storage (IndexedDB) ---------- */
+/* ---------- storage (IndexedDB) — unchanged from v1 so existing records stay ---------- */
 const DB_NAME = 'reading-log', STORE = 'books';
 let dbp = null;
 function openDB(){
@@ -224,6 +223,7 @@ function lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null
 function lsSet(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
 
 /* ---------- state ---------- */
+const OWNER = '유민';
 let books = [];
 let state = { view: 'home', id: null };
 let depth = 0;
@@ -236,19 +236,50 @@ const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp
 const fmtDate = d => d ? d.replace(/-/g, '.') : '';
 const today = () => { const d = new Date(); const p = n => String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); };
 const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
-const rateText = r => r ? r.toFixed(1) : '';
-const PALETTE = [['#6F7F63','#FFFFFF'],['#A9583D','#FFFFFF'],['#43596E','#FFFFFF'],['#D9B35A','#33261B'],['#7B5A7A','#FFFFFF'],['#8E7B5B','#FFFFFF']];
-function coverColor(title){ let h = 0; for (const c of String(title)) h = (h * 31 + c.codePointAt(0)) >>> 0; return PALETTE[h % PALETTE.length]; }
-function coverHTML(b, size){
-  if (b.cover) return `<div class="cover cover-${size}"><img src="${esc(b.cover)}" alt=""></div>`;
-  const [bg, ink] = coverColor(b.title);
-  return `<div class="cover cover-${size}" style="background:${bg};color:${ink}" aria-hidden="true">${esc(b.title)}</div>`;
+const rateText = r => r ? Number(r).toFixed(1) : '';
+
+const GRADS = [
+  'linear-gradient(180deg,#F9DCD2 0%,#F2C1B3 48%,#9DB8C7 100%)',
+  'linear-gradient(180deg,#FCE6D8 0%,#ECBBA7 55%,#C9907F 100%)',
+  'linear-gradient(180deg,#F6DFD9 0%,#DCC5D8 50%,#8FA7C0 100%)',
+  'linear-gradient(180deg,#FCEADF 0%,#F1CDB6 50%,#B4C3AE 100%)',
+  'linear-gradient(180deg,#FBE1E1 0%,#EFB9BE 52%,#B98FA6 100%)',
+  'linear-gradient(180deg,#FDEFD9 0%,#F4D1A8 50%,#D59A7E 100%)'
+];
+const SHADE = 'linear-gradient(180deg,rgba(58,40,36,0) 40%,rgba(120,60,50,.42) 100%)';
+function grad(title){ let h = 0; for (const c of String(title)) h = (h * 31 + c.codePointAt(0)) >>> 0; return GRADS[h % GRADS.length]; }
+function coverBg(b, shade){
+  const base = b.cover ? `url("${b.cover.replace(/"/g, '%22')}") center/cover` : grad(b.title);
+  return shade ? `${SHADE}, ${base}` : base;
 }
 function starsHTML(r, size){
   const p = (Math.max(0, Math.min(5, r || 0)) / 5 * 100) + '%';
   return `<span class="stars" style="--p:${p};${size ? 'font-size:' + size + 'px' : ''}" role="img" aria-label="별점 ${r || 0}점"><span class="stars-bg">★★★★★</span><span class="stars-fg">★★★★★</span></span>`;
 }
-function sorted(){ return books.slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || '')); }
+const byCreated = () => books.slice().sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+function latestDone(){
+  const done = books.filter(b => b.end).sort((a, b) => b.end.localeCompare(a.end) || (b.createdAt || '').localeCompare(a.createdAt || ''));
+  return done[0] || byCreated()[0] || null;
+}
+
+const SVG = {
+  home:'<path d="M4 11l8-7 8 7v9h-5v-6h-6v6H4z"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  back:'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  book:'<path d="M4 5.5c2.5-1 5-1 8 1 3-2 5.5-2 8-1V19c-2.5-1-5-1-8 1-3-2-5.5-2-8-1z"/><path d="M12 6.5V20"/>',
+  cal:'<rect x="4" y="5.5" width="16" height="14" rx="2"/><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4"/>',
+  check:'<rect x="4" y="5.5" width="16" height="14" rx="2"/><path d="M8.5 3.5v4M15.5 3.5v4M9 14l2 2 4-4"/>',
+  star:'<path d="M12 4l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 16.4 7.2 18.9l.9-5.4L4.2 9.7l5.4-.8z"/>',
+  down:'<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
+  up:'<path d="M12 15V4M7 9l5-5 5 5M5 20h14"/>',
+  chev:'<path d="M9 6l6 6-6 6"/>',
+  cam:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  img:'<rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="9" r="1.5"/><path d="M20 16l-5-5-9 9"/>',
+  info:'<circle cx="12" cy="12" r="8.5"/><path d="M12 11v5M12 8v.5"/>',
+  clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'
+};
+const ic = (n, s = 20, w = 1.6) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SVG[n]}</svg>`;
 
 /* ---------- navigation ---------- */
 function go(view, id, push = true){
@@ -274,77 +305,76 @@ wideMQ.addEventListener ? wideMQ.addEventListener('change', render) : wideMQ.add
 /* ---------- render ---------- */
 function render(){
   document.body.dataset.view = state.view;
+  renderNav();
   renderList();
   renderDetail();
 }
-function renderList(){
-  $('count').textContent = `기록한 책 ${books.length}권`;
-  const list = $('list');
-  if (!books.length){
-    list.innerHTML = `<div class="empty">아직 기록한 책이 없어요.<br>아래 + 버튼으로 첫 책을 등록하세요.</div>`;
-    return;
-  }
-  const cur = wideMQ.matches ? currentId() : null;
-  list.innerHTML = sorted().map(b => {
-    const date = b.end ? `완독 ${fmtDate(b.end)}` : (b.start ? `시작 ${fmtDate(b.start)}` : '');
-    const meta = [b.author, b.publisher].filter(Boolean).map(esc).join(' · ');
-    return `<button class="card" data-act="open" data-id="${esc(b.id)}" aria-current="${b.id === cur}">
-      ${coverHTML(b, 's')}
-      <span class="card-body">
-        <span class="card-title">${esc(b.title)}</span>
-        ${meta ? `<span class="card-meta">${meta}</span>` : ''}
-        <span class="card-row"><span class="badge">${esc(b.format || '종이책')}</span>${b.rating ? starsHTML(b.rating) + `<span class="num">${rateText(b.rating)}</span>` : ''}</span>
-        ${date ? `<span class="card-date">${date}</span>` : ''}
-      </span>
-    </button>`;
-  }).join('');
+function renderNav(){
+  const v = state.view;
+  $('nav').innerHTML = `
+    <button class="nav-item" data-act="home" ${v !== 'settings' ? 'aria-current="page"' : ''}>${ic('home', 24, 1.7)}<span>홈</span></button>
+    <button class="nav-add" data-act="add" aria-label="책 추가">${ic('plus', 26, 2.2)}</button>
+    <button class="nav-item" data-act="settings" ${v === 'settings' ? 'aria-current="page"' : ''}>${ic('gear', 24, 1.7)}<span>설정</span></button>`;
 }
 function currentId(){
   if (state.view === 'detail' || (state.view === 'form' && state.id)) return state.id;
-  if (state.view === 'home' && books.length) return sorted()[0].id;
+  if (state.view === 'home' && books.length){ const l = latestDone(); return l && l.id; }
   return null;
 }
-const BACK_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>';
+function renderList(){
+  const pane = $('listPane');
+  const wide = wideMQ.matches;
+  const hero = latestDone();
+  let html = `<div class="brand">나의 서재</div>
+    <div class="greet"><h1>안녕하세요, ${esc(OWNER)} 님</h1><p>오늘은 어떤 책을 읽었나요?</p></div>`;
+  if (!books.length){
+    html += `<div class="sec">나의 서재</div><div class="empty">아직 기록한 책이 없어요.<br>아래 + 버튼으로 첫 책을 등록하세요.</div>`;
+    pane.innerHTML = html; return;
+  }
+  const heroSub = [hero.author, hero.end ? fmtDate(hero.end) + ' 완독' : '', hero.rating ? '★ ' + rateText(hero.rating) : ''].filter(Boolean).map(esc).join(' · ');
+  html += `<div class="sec">${hero.end ? '최근 완독' : '최근 등록'}</div>
+    <button class="hero-card" data-act="open" data-id="${esc(hero.id)}" style="background:${coverBg(hero, true)}"><b>${esc(hero.title)}</b>${heroSub ? `<small>${heroSub}</small>` : ''}</button>
+    <div class="sec">나의 서재<span>${books.length}권</span></div>`;
+  const list = byCreated();
+  if (wide){
+    const cur = currentId();
+    html += `<div class="rows">` + list.map(b => `<button class="lrow" data-act="open" data-id="${esc(b.id)}" aria-current="${b.id === cur}">
+      <span class="lthumb" style="background:${coverBg(b, false)}"></span>
+      <span class="lbody"><b>${esc(b.title)}</b><span>${[b.author, b.format || '종이책'].filter(Boolean).map(esc).join(' · ')}</span></span>
+      ${b.rating ? starsHTML(b.rating, 12) : ''}
+    </button>`).join('') + `</div>`;
+  } else {
+    html += `<div class="shelf">` + list.map(b => `<button class="tile" data-act="open" data-id="${esc(b.id)}" style="background:${coverBg(b, true)}">
+      <b>${esc(b.title)}</b>${b.rating ? `<small>★ ${rateText(b.rating)}</small>` : ''}
+    </button>`).join('') + `</div>`;
+  }
+  pane.innerHTML = html;
+}
 function renderDetail(){
   const pane = $('detailPane');
   const v = state.view;
   if (v === 'settings') return renderSettings(pane);
   if (v === 'form') return renderForm(pane);
-  let id = v === 'detail' ? state.id : (wideMQ.matches && books.length ? sorted()[0].id : null);
+  const id = v === 'detail' ? state.id : (wideMQ.matches ? currentId() : null);
   const b = books.find(x => x.id === id);
   if (!b){
-    pane.innerHTML = v === 'home' ? `<div class="placeholder-pane">${books.length ? '' : '책을 등록하면 여기에 기록이 보여요.'}</div>` : `<div class="placeholder-pane">이 책을 찾을 수 없어요.</div>`;
+    pane.innerHTML = `<div class="placeholder-pane">${v === 'home' ? (books.length ? '' : '책을 등록하면 여기에 기록이 보여요.') : '이 책을 찾을 수 없어요.'}</div>`;
     return;
   }
+  const row = (icon, k, val) => `<div class="drow"><span class="ic">${ic(icon)}</span><span class="k">${k}</span><span class="v">${val}</span></div>`;
   pane.innerHTML = `
-  <div class="bar">
-    <button class="back-btn" data-act="back" aria-label="뒤로">${BACK_SVG}</button>
-    <span></span>
-    <button class="text-btn" data-act="edit" data-id="${esc(b.id)}">수정</button>
-  </div>
-  <div class="wrap">
-    <section class="hero">
-      ${coverHTML(b, 'l')}
-      <div class="hero-info">
-        <h1>${esc(b.title)}</h1>
-        ${(b.author || b.publisher) ? `<div class="sub" style="margin:0">${[b.author, b.publisher].filter(Boolean).map(esc).join(' · ')}</div>` : ''}
-        <span class="badge">${esc(b.format || '종이책')}</span>
-      </div>
-    </section>
-    <section class="panel">
-      <h3>나의 기록</h3>
-      <div class="grid2">
-        <div><div class="label">시작일</div><div class="value">${b.start ? fmtDate(b.start) : '-'}</div></div>
-        <div><div class="label">완독일</div><div class="value">${b.end ? fmtDate(b.end) : '-'}</div></div>
-      </div>
-      <div><div class="label">별점</div>
-        <div class="value" style="display:flex;align-items:center;gap:8px">${b.rating ? starsHTML(b.rating, 22) + `<span>${rateText(b.rating)}</span>` : '<span style="color:var(--sub)">아직 매기지 않았어요</span>'}</div>
-      </div>
-      <div><div class="label">한줄평</div>
-        ${b.review ? `<div class="review">${esc(b.review)}</div>` : `<div class="review placeholder">아직 한줄평이 없어요.</div>`}
-      </div>
-    </section>
-  </div>`;
+    <button class="back-btn" data-act="back" aria-label="뒤로">${ic('back', 24, 1.8)}</button>
+    <div class="dhero" style="background:${coverBg(b, false)}"></div>
+    <section class="sheet">
+      <h1>${esc(b.title)}</h1>
+      <div class="who">${[b.author, b.publisher].filter(Boolean).map(esc).join(' · ') || '&nbsp;'}</div>
+      ${row('book', '형식', esc(b.format || '종이책'))}
+      ${row('cal', '시작일', b.start ? fmtDate(b.start) : '-')}
+      ${row('check', '완독일', b.end ? fmtDate(b.end) : '-')}
+      ${row('star', '별점', b.rating ? starsHTML(b.rating, 15) + `<span>${rateText(b.rating)}</span>` : '<span style="color:var(--sub)">-</span>')}
+      ${b.review ? `<div class="quote">“${esc(b.review)}”</div>` : `<div class="quote ph">아직 한줄평이 없어요.</div>`}
+      <button class="pill" data-act="edit" data-id="${esc(b.id)}">기록 수정</button>
+    </section>`;
 }
 
 /* ---------- form ---------- */
@@ -355,74 +385,68 @@ function makeDraft(id){
 function starFill(i, r){ return Math.max(0, Math.min(1, r - (i - 1))) * 100; }
 function rateButtons(r){
   let h = '';
-  for (let i = 1; i <= 5; i++){
-    h += `<button type="button" data-act="star" data-i="${i}" aria-label="${i}점"><span class="s-bg">★</span><span class="s-fg" style="--f:${starFill(i, r)}%"><span>★</span></span></button>`;
-  }
+  for (let i = 1; i <= 5; i++) h += `<button type="button" data-act="star" data-i="${i}" aria-label="${i}점"><span class="s-bg">★</span><span class="s-fg" style="--f:${starFill(i, r)}%"><span>★</span></span></button>`;
   return h;
 }
+const RATE_HINT = '별의 왼쪽 절반을 누르면 0.5점';
 function renderForm(pane){
   const d = draft || (draft = makeDraft(state.id));
   const editing = !!d.id;
   pane.innerHTML = `
   <div class="bar">
-    <button class="text-btn muted" data-act="cancel">취소</button>
-    <h2>${editing ? '기록 수정' : '책 추가'}</h2>
+    <button class="text-btn" data-act="cancel">취소</button>
+    <h2>${editing ? '기록 수정' : '새 책 기록'}</h2>
     <button class="text-btn strong" data-act="save">저장</button>
   </div>
   <div class="form">
     <div class="cover-edit">
-      <div class="cover-slot" id="coverSlot">${d.cover ? `<img src="${esc(d.cover)}" alt="표지">` : '표지 없음'}</div>
+      <div class="cover-slot">${d.cover ? `<img src="${esc(d.cover)}" alt="표지">` : ic('img', 30, 1.4)}</div>
       <div class="cover-btns">
-        <button type="button" class="ghost" data-act="cam"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>사진 찍기</button>
-        <button type="button" class="ghost" data-act="gal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="9" r="1.5"/><path d="M20 16l-5-5-9 9"/></svg>갤러리에서 선택</button>
-        ${d.cover ? `<button type="button" class="text-btn muted" data-act="nocover" style="height:36px">표지 지우기</button>` : ''}
+        <p>표지 사진을 넣으면<br>서재가 더 예뻐져요</p>
+        <button type="button" class="soft" data-act="cam">${ic('cam', 18)}사진 찍기</button>
+        <button type="button" class="soft" data-act="gal">${ic('img', 18)}갤러리에서 선택</button>
+        ${d.cover ? `<button type="button" class="text-btn" data-act="nocover" style="height:32px">표지 지우기</button>` : ''}
       </div>
     </div>
     <div class="field">
-      <label for="f-title">제목</label>
+      <label class="lab" for="f-title">제목</label>
       <input class="input" id="f-title" data-k="title" value="${esc(d.title)}" placeholder="책 제목" autocomplete="off">
       <span class="err hidden" id="titleErr">제목을 입력하세요.</span>
     </div>
     <div class="field">
-      <label for="f-author">저자</label>
+      <label class="lab" for="f-author">저자</label>
       <input class="input" id="f-author" data-k="author" value="${esc(d.author)}" placeholder="저자 이름" autocomplete="off">
     </div>
     <div class="field">
-      <label for="f-pub">출판사 (선택)</label>
+      <label class="lab" for="f-pub">출판사 (선택)</label>
       <input class="input" id="f-pub" data-k="publisher" value="${esc(d.publisher)}" placeholder="출판사" autocomplete="off">
     </div>
     <div class="field">
-      <span class="flabel" id="fmtLabel">형식</span>
+      <span class="lab" id="fmtLabel">형식</span>
       <div class="seg" role="group" aria-labelledby="fmtLabel">
         ${['종이책','전자책'].map(f => `<button type="button" data-act="fmt" data-v="${f}" aria-pressed="${d.format === f}">${f}</button>`).join('')}
       </div>
     </div>
     <div class="grid2">
-      <div class="field">
-        <label for="f-start">시작일</label>
-        <input class="input" type="date" id="f-start" data-k="start" value="${esc(d.start)}">
-      </div>
-      <div class="field">
-        <label for="f-end">완독일</label>
-        <input class="input" type="date" id="f-end" data-k="end" value="${esc(d.end)}">
-      </div>
+      <div class="field"><label class="lab" for="f-start">시작일</label><input class="input" type="date" id="f-start" data-k="start" value="${esc(d.start)}"></div>
+      <div class="field"><label class="lab" for="f-end">완독일</label><input class="input" type="date" id="f-end" data-k="end" value="${esc(d.end)}"></div>
     </div>
     <div class="field">
-      <span class="flabel" id="rateLabel">별점 <span id="rateVal">${d.rating ? rateText(d.rating) : '(별의 왼쪽 절반을 누르면 0.5점)'}</span></span>
+      <span class="lab" id="rateLabel">별점 · <span id="rateVal">${d.rating ? rateText(d.rating) : RATE_HINT}</span></span>
       <div class="rate" id="rate" role="group" aria-labelledby="rateLabel">${rateButtons(d.rating)}</div>
     </div>
     <div class="field">
-      <label for="f-review">한줄평</label>
+      <label class="lab" for="f-review">한줄평</label>
       <textarea class="input" id="f-review" data-k="review" rows="3" maxlength="300" placeholder="이 책을 한 줄로 남겨보세요">${esc(d.review)}</textarea>
     </div>
-    <button type="button" class="primary" data-act="save">저장</button>
+    <button type="button" class="primary" data-act="save">저장하기</button>
     ${editing ? `<button type="button" class="danger-btn" data-act="delete">이 책 삭제</button>` : ''}
   </div>`;
 }
 function setRating(r){
   draft.rating = r;
   $('rate').innerHTML = rateButtons(r);
-  $('rateVal').textContent = r ? rateText(r) : '(별의 왼쪽 절반을 누르면 0.5점)';
+  $('rateVal').textContent = r ? rateText(r) : RATE_HINT;
 }
 async function saveDraft(){
   const d = draft;
@@ -433,24 +457,21 @@ async function saveDraft(){
   }
   const now = new Date().toISOString();
   const b = { id: d.id || uid(), title: d.title, author: (d.author || '').trim(), publisher: (d.publisher || '').trim(), format: d.format || '종이책', cover: d.cover || null, start: d.start || '', end: d.end || '', rating: d.rating || 0, review: (d.review || '').trim(), createdAt: d.createdAt || now, updatedAt: now };
-  try {
-    await dbPut(b);
-  } catch(e){ toast('저장하지 못했어요. 폰 저장 공간을 확인하세요.'); return; }
+  try { await dbPut(b); } catch(e){ toast('저장하지 못했어요. 폰 저장 공간을 확인하세요.'); return; }
   await reload();
   draft = null;
   state = { view: 'detail', id: b.id };
   try { history.replaceState(state, ''); } catch(e){}
   render();
+  $('detailPane').scrollTop = 0;
   toast('저장했어요.');
 }
-
-/* cover image: resize to keep storage small */
 function readImage(file){
   return new Promise((res, rej) => {
     const url = URL.createObjectURL(file);
     const img = new Image();
     img.onload = () => {
-      const max = 600;
+      const max = 800;
       let { width: w, height: h } = img;
       const k = Math.min(1, max / Math.max(w, h));
       w = Math.round(w * k); h = Math.round(h * k);
@@ -467,11 +488,8 @@ async function onCoverFile(e){
   const f = e.target.files && e.target.files[0];
   e.target.value = '';
   if (!f || !draft) return;
-  try {
-    draft.cover = await readImage(f);
-    captureInputs();
-    renderForm($('detailPane'));
-  } catch(err){ toast('이 사진을 불러오지 못했어요. 다른 사진을 골라보세요.'); }
+  try { draft.cover = await readImage(f); captureInputs(); renderForm($('detailPane')); }
+  catch(err){ toast('이 사진을 불러오지 못했어요. 다른 사진을 골라보세요.'); }
 }
 function captureInputs(){
   document.querySelectorAll('#detailPane [data-k]').forEach(el => { if (draft) draft[el.dataset.k] = el.value; });
@@ -481,23 +499,18 @@ function captureInputs(){
 function renderSettings(pane){
   const last = lsGet('lastBackup');
   pane.innerHTML = `
-  <div class="bar">
-    <button class="back-btn" data-act="back" aria-label="뒤로">${BACK_SVG}</button>
-    <h2 style="flex:1">설정</h2>
+  <div class="page-title"><h1>설정</h1></div>
+  <div class="group">백업</div>
+  <div class="srows">
+    <button class="srow" data-act="export"><span class="ic">${ic('down')}</span><span class="t">백업 파일 내보내기</span><span class="ic">${ic('chev', 18)}</span></button>
+    <button class="srow" data-act="import"><span class="ic">${ic('up')}</span><span class="t">백업 파일 불러오기</span><span class="ic">${ic('chev', 18)}</span></button>
+    <div class="srow"><span class="ic">${ic('clock')}</span><span class="t">마지막 백업</span><span class="r">${last ? fmtDate(last) : '아직 없음'}</span></div>
   </div>
-  <div class="wrap">
-    <section class="panel">
-      <h3>백업</h3>
-      <p class="note">기록은 이 폰에만 저장돼요. 폰을 바꾸거나 브라우저 데이터를 지우기 전에 백업 파일을 만들어 두세요.</p>
-      <button class="primary" data-act="export"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>백업 파일 내보내기</button>
-      <button class="ghost" style="height:52px;font-size:16px" data-act="import"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M7 9l5-5 5 5M5 20h14"/></svg>백업 파일 불러오기</button>
-      <p class="note">마지막 백업: ${last ? fmtDate(last) : '아직 없음'}</p>
-    </section>
-    <section class="panel">
-      <h3>앱 정보</h3>
-      <div class="row"><span>버전</span><span>1.0</span></div>
-      <div class="row"><span>기록한 책</span><span>${books.length}권</span></div>
-    </section>
+  <p class="tip">기록은 이 폰에만 저장돼요. 폰을 바꾸거나 브라우저 데이터를 지우기 전에 백업 파일을 만들어 두세요.</p>
+  <div class="group">앱 정보</div>
+  <div class="srows" style="padding-bottom:110px">
+    <div class="srow"><span class="ic">${ic('info')}</span><span class="t">버전</span><span class="r">2.0</span></div>
+    <div class="srow"><span class="ic">${ic('book')}</span><span class="t">기록한 책</span><span class="r">${books.length}권</span></div>
   </div>`;
 }
 async function exportBackup(){
@@ -505,13 +518,8 @@ async function exportBackup(){
   const data = JSON.stringify({ app: 'reading-log', version: 1, exportedAt: new Date().toISOString(), books: all }, null, 1);
   const filename = `독서기록-백업-${today()}.json`;
   if (dl){
-    try {
-      await dl.save({ filename, data });
-      lsSet('lastBackup', today()); render(); toast('백업 파일을 저장했어요.');
-    } catch(e){
-      if (e && e.code === 'declined') return;
-      toast('백업 파일을 저장하지 못했어요.');
-    }
+    try { await dl.save({ filename, data }); lsSet('lastBackup', today()); render(); toast('백업 파일을 저장했어요.'); }
+    catch(e){ if (e && e.code === 'declined') return; toast('백업 파일을 저장하지 못했어요.'); }
     return;
   }
   const blob = new Blob([data], { type: 'application/json' });
@@ -565,9 +573,12 @@ document.addEventListener('click', async e => {
   const act = el.dataset.act;
   switch (act){
     case 'open': go('detail', el.dataset.id, !(wideMQ.matches && state.view === 'detail')); break;
+    case 'home':
+      if (state.view === 'home') { $('listPane').scrollTop = 0; break; }
+      state = { view: 'home', id: null }; try { history.pushState(state, ''); depth++; } catch(err){} render(); break;
     case 'add': go('form', null); break;
     case 'edit': go('form', el.dataset.id); break;
-    case 'settings': go('settings', null); break;
+    case 'settings': if (state.view !== 'settings') go('settings', null); break;
     case 'back': back(); break;
     case 'cancel': draft = null; back(); break;
     case 'save': captureInputs(); await saveDraft(); break;
