@@ -1,5 +1,5 @@
-const CACHE = 'reading-log-v3';
-const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
+const CACHE = 'reading-log-v4';
+const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-v2-192.png', './icon-v2-512.png', './icon-v2-maskable-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
 });

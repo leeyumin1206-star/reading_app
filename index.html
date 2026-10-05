@@ -7,14 +7,14 @@
 <meta name="theme-color" content="#221A19" media="(prefers-color-scheme: dark)">
 <title>나의 서재</title>
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icon-192.png">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon-v2-192.png">
+<link rel="apple-touch-icon" href="icon-v2-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap">
 <style>
 :root{
   --bg:#FFFFFF; --blush:#FCEEEA; --blush2:#F8D9D0; --line:#F2E7E3;
-  --ink:#3A3433; --sub:#776C69; --icon:#B79F98; --muted:#9A8F8B;
+  --ink:#2E2422; --sub:#6E5F5B; --icon:#B79F98; --muted:#8C807C;
   --accent:#B5604D; --accent-ink:#FFFFFF; --soft-ink:#8E4636; --add:#E59A86;
   --star:#E08C76; --star-off:#F1DAD3; --danger:#A8382A; --shadow:rgba(214,150,130,.25);
   --font:'Malgun Gothic','맑은 고딕','Noto Sans KR','Apple SD Gothic Neo',sans-serif;
@@ -162,6 +162,43 @@ textarea.input{height:auto;padding:14px 16px;resize:none;line-height:1.6}
 .modal-actions .ok.warn{background:var(--danger);color:#fff}
 .toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-size:14px;z-index:30;max-width:calc(100% - 40px);text-align:center}
 @media (prefers-reduced-motion:no-preference){.toast{animation:pop .2s ease-out}@keyframes pop{from{opacity:0;transform:translate(-50%,8px)}}}
+
+/* v2.1: readable titles, uncropped covers */
+.cv{position:relative;overflow:hidden;border-radius:6px;box-shadow:0 6px 14px rgba(60,35,30,.18);flex-shrink:0;background:var(--blush)}
+.cv img{display:block;width:100%;height:100%;object-fit:contain}
+.gen{display:flex;flex-direction:column;padding:12% 11%;gap:6px;box-shadow:inset 4px 0 0 rgba(0,0,0,.14),0 6px 14px rgba(60,35,30,.18)}
+.gen .gb{width:28%;height:2px;flex-shrink:0}
+.gen b{font-weight:700;line-height:1.25;word-break:keep-all}
+.gen small{margin-top:auto;opacity:.85;letter-spacing:.06em}
+.cv-tile{width:100%;aspect-ratio:3/4}.cv-tile.gen b{font-size:14px}.cv-tile.gen small{font-size:10px}
+.cv-hero{width:72px;height:104px}.cv-hero.gen b{font-size:10px}.cv-hero.gen small{font-size:8px}
+.cv-row{width:40px;height:56px;border-radius:5px}.cv-row.gen b,.cv-row.gen small,.cv-row.gen .gb{display:none}
+.cv-form{width:104px;height:150px;border-radius:8px}.cv-form.gen b{font-size:13px}.cv-form.gen small{font-size:9px}
+.cv-detail{height:178px;border-radius:8px}.cv-detail img{width:auto;max-width:260px;height:178px}.cv-detail.gen{width:124px}.cv-detail.gen b{font-size:15px}.cv-detail.gen small{font-size:10px}
+.recent{margin:0 24px;display:flex;gap:16px;align-items:center;padding:14px;background:var(--blush);border-radius:20px;border:none;width:calc(100% - 48px);text-align:left;color:var(--ink)}
+.recent .rb{display:flex;flex-direction:column;gap:5px;min-width:0}
+.recent .rt{font-size:20px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.recent .rs{font-size:14px;color:var(--sub)}
+.recent .rr{display:flex;align-items:center;gap:6px;margin-top:2px;font-size:14px;font-weight:700}
+.shelf{grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:16px 14px}
+.book{display:flex;flex-direction:column;gap:6px;border:none;background:none;padding:0;text-align:left;color:var(--ink);min-width:0}
+.book b{font-size:14px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.book small{font-size:12px;color:var(--sub);margin-top:-3px}
+.dtop{position:relative;height:236px;background:linear-gradient(180deg,var(--blush) 0%,var(--blush2) 100%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:18px}
+.dtop .back-btn{background:transparent;color:var(--ink);backdrop-filter:none}
+.dbody{padding:20px 24px 32px;display:flex;flex-direction:column}
+@media (min-width:700px){.dbody{padding:24px 40px 32px}}
+.dbody h1{margin:0;font-size:24px;font-weight:700;letter-spacing:-.02em;text-align:center;word-break:keep-all}
+.dbody .who{font-size:14px;color:var(--sub);margin:6px 0 14px;text-align:center}
+.drow .k{font-size:14px;letter-spacing:0}
+.drow .v{font-size:15px;font-weight:500}
+.dbody .pill{background:var(--accent);color:var(--accent-ink)}
+.input{background:var(--bg);border:1.5px solid #EAD9D3}
+:root[data-theme="dark"] .input{border-color:var(--line)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .input{border-color:var(--line)}}
+.lab{font-size:14px;letter-spacing:0;font-weight:500}
+.nav-add{background:var(--accent);color:var(--accent-ink)}
+.nav-item[aria-current="page"]{font-weight:700}
 </style>
 </head>
 <body data-view="home">
@@ -238,19 +275,15 @@ const today = () => { const d = new Date(); const p = n => String(n).padStart(2,
 const uid = () => (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36) + Math.random().toString(36).slice(2));
 const rateText = r => r ? Number(r).toFixed(1) : '';
 
-const GRADS = [
-  'linear-gradient(180deg,#F9DCD2 0%,#F2C1B3 48%,#9DB8C7 100%)',
-  'linear-gradient(180deg,#FCE6D8 0%,#ECBBA7 55%,#C9907F 100%)',
-  'linear-gradient(180deg,#F6DFD9 0%,#DCC5D8 50%,#8FA7C0 100%)',
-  'linear-gradient(180deg,#FCEADF 0%,#F1CDB6 50%,#B4C3AE 100%)',
-  'linear-gradient(180deg,#FBE1E1 0%,#EFB9BE 52%,#B98FA6 100%)',
-  'linear-gradient(180deg,#FDEFD9 0%,#F4D1A8 50%,#D59A7E 100%)'
+const COVERS = [
+  ['#2F4A3A','#F3EBDD','#C9A86A'], ['#F1E4C8','#3B2C22','#D2693C'], ['#1F2D4A','#F4E3C1','#E3B04B'],
+  ['#E9E4DA','#2A2A2A','#8B1E2D'], ['#6B3A44','#F6E7E2','#E9B7A8'], ['#DDE6E1','#24342D','#4F7A65']
 ];
-const SHADE = 'linear-gradient(180deg,rgba(58,40,36,0) 40%,rgba(120,60,50,.42) 100%)';
-function grad(title){ let h = 0; for (const c of String(title)) h = (h * 31 + c.codePointAt(0)) >>> 0; return GRADS[h % GRADS.length]; }
-function coverBg(b, shade){
-  const base = b.cover ? `url("${b.cover.replace(/"/g, '%22')}") center/cover` : grad(b.title);
-  return shade ? `${SHADE}, ${base}` : base;
+function pal(title){ let h = 0; for (const c of String(title)) h = (h * 31 + c.codePointAt(0)) >>> 0; return COVERS[h % COVERS.length]; }
+function coverHTML(b, cls){
+  if (b.cover) return `<span class="cv ${cls}"><img src="${esc(b.cover)}" alt="" loading="lazy"></span>`;
+  const [bg, ink, acc] = pal(b.title);
+  return `<span class="cv gen ${cls}" style="background:${bg};color:${ink}" aria-hidden="true"><span class="gb" style="background:${acc}"></span><b>${esc(b.title)}</b><small>${esc(b.author || '')}</small></span>`;
 }
 function starsHTML(r, size){
   const p = (Math.max(0, Math.min(5, r || 0)) / 5 * 100) + '%';
@@ -331,21 +364,24 @@ function renderList(){
     html += `<div class="sec">나의 서재</div><div class="empty">아직 기록한 책이 없어요.<br>아래 + 버튼으로 첫 책을 등록하세요.</div>`;
     pane.innerHTML = html; return;
   }
-  const heroSub = [hero.author, hero.end ? fmtDate(hero.end) + ' 완독' : '', hero.rating ? '★ ' + rateText(hero.rating) : ''].filter(Boolean).map(esc).join(' · ');
+  const heroSub = [hero.author, hero.end ? fmtDate(hero.end) + ' 완독' : ''].filter(Boolean).map(esc).join(' · ');
   html += `<div class="sec">${hero.end ? '최근 완독' : '최근 등록'}</div>
-    <button class="hero-card" data-act="open" data-id="${esc(hero.id)}" style="background:${coverBg(hero, true)}"><b>${esc(hero.title)}</b>${heroSub ? `<small>${heroSub}</small>` : ''}</button>
+    <button class="recent" data-act="open" data-id="${esc(hero.id)}">
+      ${coverHTML(hero, 'cv-hero')}
+      <span class="rb"><span class="rt">${esc(hero.title)}</span>${heroSub ? `<span class="rs">${heroSub}</span>` : ''}${hero.rating ? `<span class="rr">${starsHTML(hero.rating, 15)}${rateText(hero.rating)}</span>` : ''}</span>
+    </button>
     <div class="sec">나의 서재<span>${books.length}권</span></div>`;
   const list = byCreated();
   if (wide){
     const cur = currentId();
     html += `<div class="rows">` + list.map(b => `<button class="lrow" data-act="open" data-id="${esc(b.id)}" aria-current="${b.id === cur}">
-      <span class="lthumb" style="background:${coverBg(b, false)}"></span>
+      ${coverHTML(b, 'cv-row')}
       <span class="lbody"><b>${esc(b.title)}</b><span>${[b.author, b.format || '종이책'].filter(Boolean).map(esc).join(' · ')}</span></span>
       ${b.rating ? starsHTML(b.rating, 12) : ''}
     </button>`).join('') + `</div>`;
   } else {
-    html += `<div class="shelf">` + list.map(b => `<button class="tile" data-act="open" data-id="${esc(b.id)}" style="background:${coverBg(b, true)}">
-      <b>${esc(b.title)}</b>${b.rating ? `<small>★ ${rateText(b.rating)}</small>` : ''}
+    html += `<div class="shelf">` + list.map(b => `<button class="book" data-act="open" data-id="${esc(b.id)}">
+      ${coverHTML(b, 'cv-tile')}<b>${esc(b.title)}</b>${b.rating ? `<small>★ ${rateText(b.rating)}</small>` : ''}
     </button>`).join('') + `</div>`;
   }
   pane.innerHTML = html;
@@ -363,9 +399,11 @@ function renderDetail(){
   }
   const row = (icon, k, val) => `<div class="drow"><span class="ic">${ic(icon)}</span><span class="k">${k}</span><span class="v">${val}</span></div>`;
   pane.innerHTML = `
-    <button class="back-btn" data-act="back" aria-label="뒤로">${ic('back', 24, 1.8)}</button>
-    <div class="dhero" style="background:${coverBg(b, false)}"></div>
-    <section class="sheet">
+    <div class="dtop">
+      <button class="back-btn" data-act="back" aria-label="뒤로">${ic('back', 24, 1.9)}</button>
+      ${coverHTML(b, 'cv-detail')}
+    </div>
+    <section class="dbody">
       <h1>${esc(b.title)}</h1>
       <div class="who">${[b.author, b.publisher].filter(Boolean).map(esc).join(' · ') || '&nbsp;'}</div>
       ${row('book', '형식', esc(b.format || '종이책'))}
@@ -400,10 +438,10 @@ function renderForm(pane){
   </div>
   <div class="form">
     <div class="cover-edit">
-      <div class="cover-slot">${d.cover ? `<img src="${esc(d.cover)}" alt="표지">` : ic('img', 30, 1.4)}</div>
+      ${d.cover ? `<span class="cv cv-form"><img src="${esc(d.cover)}" alt="표지 사진"></span>` : `<div class="cover-slot">${ic('img', 30, 1.4)}</div>`}
       <div class="cover-btns">
-        <p>표지 사진을 넣으면<br>서재가 더 예뻐져요</p>
-        <button type="button" class="soft" data-act="cam">${ic('cam', 18)}사진 찍기</button>
+        <p>${d.cover ? '찍은 표지 사진이<br>잘리지 않고 그대로 보여요' : '표지 사진을 넣으면<br>서재가 더 예뻐져요'}</p>
+        <button type="button" class="soft" data-act="cam">${ic('cam', 18)}${d.cover ? '사진 다시 찍기' : '사진 찍기'}</button>
         <button type="button" class="soft" data-act="gal">${ic('img', 18)}갤러리에서 선택</button>
         ${d.cover ? `<button type="button" class="text-btn" data-act="nocover" style="height:32px">표지 지우기</button>` : ''}
       </div>
@@ -509,7 +547,7 @@ function renderSettings(pane){
   <p class="tip">기록은 이 폰에만 저장돼요. 폰을 바꾸거나 브라우저 데이터를 지우기 전에 백업 파일을 만들어 두세요.</p>
   <div class="group">앱 정보</div>
   <div class="srows" style="padding-bottom:110px">
-    <div class="srow"><span class="ic">${ic('info')}</span><span class="t">버전</span><span class="r">2.0</span></div>
+    <div class="srow"><span class="ic">${ic('info')}</span><span class="t">버전</span><span class="r">2.1</span></div>
     <div class="srow"><span class="ic">${ic('book')}</span><span class="t">기록한 책</span><span class="r">${books.length}권</span></div>
   </div>`;
 }
